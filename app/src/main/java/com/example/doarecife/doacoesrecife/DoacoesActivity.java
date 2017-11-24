@@ -1,9 +1,13 @@
 package com.example.doarecife.doacoesrecife;
 
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.doarecife.doacoesrecife.models.ItemDoacao;
+
+import org.parceler.Parcels;
 
 public class DoacoesActivity extends AppCompatActivity
         implements ListaDoacoesFragment.CliqueiNoItemListener{
@@ -16,11 +20,17 @@ public class DoacoesActivity extends AppCompatActivity
 
     @Override
     public void itemFoiClicado(ItemDoacao itemDoacao) {
-        DetalheDoacaoFragment ddf = DetalheDoacaoFragment.newInstance(itemDoacao);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.detalhe, ddf, "detalhe")
-                .commit();
-
+       if (getResources().getBoolean(R.bool.tablet)) {
+           DetalheDoacaoFragment ddf = DetalheDoacaoFragment.newInstance(itemDoacao);
+           getSupportFragmentManager()
+                   .beginTransaction()
+                   .replace(R.id.detalhe, ddf, "detalhe")
+                   .commit();
+       }else {
+           Intent it = new Intent(this, DetalheDoacaoActivity.class);
+           Parcelable p = Parcels.wrap(itemDoacao);
+           it.putExtra(DetalheDoacaoActivity.EXTRA_DOACAO, p);
+           startActivity(it);
+       }
     }
 }
