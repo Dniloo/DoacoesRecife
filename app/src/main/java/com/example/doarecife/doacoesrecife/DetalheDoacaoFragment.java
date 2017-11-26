@@ -1,7 +1,5 @@
 package com.example.doarecife.doacoesrecife;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -10,16 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.doarecife.doacoesrecife.models.ItemDoacao;
+import com.example.doarecife.doacoesrecife.models.Itemdoacao;
 
-import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -32,12 +27,12 @@ public class DetalheDoacaoFragment extends Fragment {
     TextView mTextTipo;
 
 
-    private ItemDoacao mItemDoacao;
+    private Itemdoacao mItemdoacao;
 
-    public static DetalheDoacaoFragment newInstance(ItemDoacao itemDoacao) {
+    public static DetalheDoacaoFragment newInstance(Itemdoacao itemdoacao) {
         DetalheDoacaoFragment fragment = new DetalheDoacaoFragment();
         Bundle args = new Bundle();
-        Parcelable p = Parcels.wrap(itemDoacao);
+        Parcelable p = Parcels.wrap(itemdoacao);
         args.putParcelable(EXTRA_DOACAO, p);
         fragment.setArguments(args);
         return fragment;
@@ -48,7 +43,7 @@ public class DetalheDoacaoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             Parcelable p = getArguments().getParcelable(EXTRA_DOACAO);
-            mItemDoacao = Parcels.unwrap(p);
+            mItemdoacao = Parcels.unwrap(p);
         }
     }
 
@@ -59,8 +54,8 @@ public class DetalheDoacaoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detalhe_doacao, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mTextLocal.setText(mItemDoacao.getLocal());
-        mTextTipo.setText(mItemDoacao.getTipo());
+        mTextLocal.setText(mItemdoacao.getLocal());
+        mTextTipo.setText(mItemdoacao.getTipo());
         return view;
     }
 

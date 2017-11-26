@@ -6,9 +6,9 @@ import java.util.List;
  * Created by jose mario on 24/11/2017.
  */
 
-public class Tipo {
+public class Categoria {
     String nome;
-    List<ItemDoacao> itens;
+    List<Itemdoacao> itens;
 
     public String getNome() {
         return nome;
@@ -18,11 +18,11 @@ public class Tipo {
         this.nome = nome;
     }
 
-    public List<ItemDoacao> getItens() {
+    public List<Itemdoacao> getItens() {
         return itens;
     }
 
-    public void setItens(List<ItemDoacao> itens) {
+    public void setItens(List<Itemdoacao> itens) {
         this.itens = itens;
     }
 

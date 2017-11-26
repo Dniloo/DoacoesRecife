@@ -5,16 +5,15 @@ import java.util.List;
 /**
  * Created by jose mario on 24/11/2017.
  */
-
 public class Doacao {
 
-    List<Tipo> tipos;
+    List<Categoria> categorias;
 
-    public List<Tipo> getTipos() {
-        return tipos;
+    public List<Categoria> getCategorias() {
+        return categorias;
     }
 
-    public void setTipos(List<Tipo> tipos) {
-        this.tipos = tipos;
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
     }
 }
