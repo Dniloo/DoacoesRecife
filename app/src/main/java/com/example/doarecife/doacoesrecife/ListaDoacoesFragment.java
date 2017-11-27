@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.doarecife.doacoesrecife.models.Categoria;
 import com.example.doarecife.doacoesrecife.models.Doacao;
 import com.example.doarecife.doacoesrecife.models.Itemdoacao;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,8 @@ public class ListaDoacoesFragment extends Fragment {
 
     @BindView(R.id.list_itemdoacao)
             ListView mListView;
-
-      List<Itemdoacao> mItemdoacaoList;
-
+            List<Itemdoacao> mItemdoacaoList;
+            ArrayAdapter<Itemdoacao> mAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,8 +42,10 @@ public class ListaDoacoesFragment extends Fragment {
         ButterKnife.bind(this, layout);
 
         mItemdoacaoList = new ArrayList<>();
-        mListView.setAdapter(new ArrayAdapter<Itemdoacao>(
-                getActivity(), android.R.layout.simple_list_item_1, mItemdoacaoList));
+        mAdapter = new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_list_item_1,
+                mItemdoacaoList);
+        mListView.setAdapter(mAdapter);
         return layout;
     }
 
@@ -78,12 +81,28 @@ public class ListaDoacoesFragment extends Fragment {
                 Response response = client.newCall(request).execute();
                 String jsonString = response.body().string();
                 Log.d("NGVL", jsonString);
+                Gson gson = new Gson();
+                Doacao doacao = gson.fromJson(jsonString, Doacao.class);
+                return doacao;
 
             }catch (Exception e){
                 e.printStackTrace();
             }
             return null;
         }
-    }
 
-}
+        @Override
+        protected void onPostExecute(Doacao doacao) {
+            super.onPostExecute(doacao);
+            if (doacao != null){
+                mItemdoacaoList.clear();
+                for (Categoria categoria: doacao.getCategorias()
+                     ) {
+                        mItemdoacaoList.addAll(categoria.getItens());
+                }
+                mAdapter.notifyDataSetChanged();
+               }
+
+            }
+        }
+    }

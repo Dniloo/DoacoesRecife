@@ -1,5 +1,7 @@
 package com.example.doarecife.doacoesrecife.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -7,7 +9,9 @@ import java.util.List;
  */
 
 public class Categoria {
+
     String nome;
+    @SerializedName("itemdoacao")
     List<Itemdoacao> itens;
 
     public String getNome() {

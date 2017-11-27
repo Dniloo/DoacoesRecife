@@ -33,4 +33,5 @@ dependencies {
     annotationProcessor 'org.parceler:parceler:1.1.9'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
+    compile 'com.google.code.gson:gson:2.8.2'
 }

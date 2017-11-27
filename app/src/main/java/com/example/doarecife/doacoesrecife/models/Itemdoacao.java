@@ -54,6 +54,6 @@ public class Itemdoacao {
 
     @Override
     public String toString() {
-        return local + " - " + tipo;
+        return local +" - "+ tipo;
     }
 }
