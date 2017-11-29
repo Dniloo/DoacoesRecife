@@ -25,7 +25,7 @@ public class DoacoesActivity extends AppCompatActivity
            getSupportFragmentManager()
                    .beginTransaction()
                    .replace(R.id.detalhe, ddf, "detalhe")
-                   .commit();
+                    .commit();
        }else {
            Intent it = new Intent(this, DetalheDoacaoActivity.class);
            Parcelable p = Parcels.wrap(itemdoacao);

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +33,19 @@ public class ListaDoacoesFragment extends Fragment {
 
     @BindView(R.id.list_itemdoacao)
             ListView mListView;
+    @BindView(R.id.swipe)
+            SwipeRefreshLayout mSwipe;
             List<Itemdoacao> mItemdoacaoList;
             ArrayAdapter<Itemdoacao> mAdapter;
+            DoacaoTask mTask;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        mItemdoacaoList = new ArrayList<>();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,18 +53,36 @@ public class ListaDoacoesFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_lista_doacoes, container, false);
         ButterKnife.bind(this, layout);
 
-        mItemdoacaoList = new ArrayList<>();
-        mAdapter = new ArrayAdapter<>(
-                getActivity(), android.R.layout.simple_list_item_1,
-                mItemdoacaoList);
+        mAdapter = new ItemDoacaoAdapter(getContext(), mItemdoacaoList);
         mListView.setAdapter(mAdapter);
+        mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mTask = new DoacaoTask();
+                mTask.execute();
+            }
+        });
         return layout;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new DoacaoTask().execute();
+        if(mItemdoacaoList.size() == 0 && mTask == null) {
+            mTask = new DoacaoTask();
+            mTask.execute();
+        } else if (mTask != null && mTask.getStatus() == AsyncTask.Status.RUNNING) {
+            showProgress();
+        }
+    }
+
+    private void showProgress(){
+        mSwipe.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipe.setRefreshing(true);
+            }
+        });
     }
 
     @OnItemClick(R.id.list_itemdoacao)
@@ -68,6 +98,12 @@ public class ListaDoacoesFragment extends Fragment {
         void itemFoiClicado(Itemdoacao itemdoacao);
     }
     class DoacaoTask extends AsyncTask<Void, Void, Doacao> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgress();
+        }
 
         @Override
         protected Doacao doInBackground(Void... params) {
@@ -102,7 +138,7 @@ public class ListaDoacoesFragment extends Fragment {
                 }
                 mAdapter.notifyDataSetChanged();
                }
-
+               mSwipe.setRefreshing(false);
             }
         }
     }
