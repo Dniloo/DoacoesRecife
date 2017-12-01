@@ -19,43 +19,47 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by PC GAMER on 28/11/2017.
+ * Created by jose mario on 28/11/2017.
  */
 
-public class ItemDoacaoAdapter extends ArrayAdapter<Itemdoacao> {
-    public ItemDoacaoAdapter(Context context, List<Itemdoacao> itensDoacao) {
-        super(context, 0, itensDoacao);
+public class ItemAdapter extends ArrayAdapter<Itemdoacao> {
+    public ItemAdapter(@NonNull Context context, List<Itemdoacao> itemdoacaos) {
+        super(context, 0, itemdoacaos);
     }
 
+    @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Itemdoacao item = getItem(position);
+        Itemdoacao itemdoacao = getItem(position);
 
         ViewHolder viewHolder;
-        if(convertView == null) {
+
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.item_doacao, parent, false);
+                    R.layout.item_doacao, null);
             viewHolder = new ViewHolder(convertView);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Glide.with(getContext()).load(item.getFoto()).into(viewHolder.imageView);
-        viewHolder.txtTitulo.setText(item.getLocal());
-        viewHolder.txtTipo.setText(item.getTipo());
-
+        Glide.with(getContext()).load(itemdoacao.getFoto()).into(viewHolder.imageView);
+        viewHolder.textLocal.setText(itemdoacao.getLocal());
+        viewHolder.textTipo.setText(itemdoacao.getTipo());
         return convertView;
+
     }
 
     static class ViewHolder {
         @BindView(R.id.imageFoto)
         ImageView imageView;
         @BindView(R.id.text_Local)
-        TextView txtTitulo;
-        @BindView(R.id.text_tipo)
-        TextView txtTipo;
+        TextView textLocal;
+        @BindView(R.id.text_tipo2)
+        TextView textTipo;
+
 
         public ViewHolder(View parent) {
+            super();
             ButterKnife.bind(this, parent);
             parent.setTag(this);
         }

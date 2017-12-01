@@ -10,6 +10,7 @@ public class Itemdoacao {
     String tipo;
     int quantidade;
     String foto;
+    long id;
 
     public int getQuantidade() {
         return quantidade;
@@ -55,5 +56,13 @@ public class Itemdoacao {
     @Override
     public String toString() {
         return local +" - "+ tipo;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

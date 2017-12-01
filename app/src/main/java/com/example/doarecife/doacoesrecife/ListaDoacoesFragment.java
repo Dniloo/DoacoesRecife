@@ -32,12 +32,15 @@ import okhttp3.Response;
 public class ListaDoacoesFragment extends Fragment {
 
     @BindView(R.id.list_itemdoacao)
-            ListView mListView;
+    ListView mListView;
+
+    DoacaoTask mDoacaoTask;
+
     @BindView(R.id.swipe)
-            SwipeRefreshLayout mSwipe;
-            List<Itemdoacao> mItemdoacaoList;
-            ArrayAdapter<Itemdoacao> mAdapter;
-            DoacaoTask mTask;
+    SwipeRefreshLayout mSwipe;
+
+    List<Itemdoacao> mItemdoacaoList;
+    ArrayAdapter<Itemdoacao> mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,13 +56,13 @@ public class ListaDoacoesFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_lista_doacoes, container, false);
         ButterKnife.bind(this, layout);
 
-        mAdapter = new ItemDoacaoAdapter(getContext(), mItemdoacaoList);
+        mAdapter = new ItemAdapter(getContext(), mItemdoacaoList);
         mListView.setAdapter(mAdapter);
         mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mTask = new DoacaoTask();
-                mTask.execute();
+                mDoacaoTask = new DoacaoTask();
+                mDoacaoTask.execute();
             }
         });
         return layout;
@@ -68,15 +71,15 @@ public class ListaDoacoesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(mItemdoacaoList.size() == 0 && mTask == null) {
-            mTask = new DoacaoTask();
-            mTask.execute();
-        } else if (mTask != null && mTask.getStatus() == AsyncTask.Status.RUNNING) {
+        if (mItemdoacaoList.size() == 0 && mDoacaoTask == null) {
+            mDoacaoTask = new DoacaoTask();
+            mDoacaoTask.execute();
+        } else if (mDoacaoTask != null && mDoacaoTask.getStatus() == AsyncTask.Status.RUNNING) {
             showProgress();
         }
     }
 
-    private void showProgress(){
+    private void showProgress() {
         mSwipe.post(new Runnable() {
             @Override
             public void run() {
@@ -84,61 +87,58 @@ public class ListaDoacoesFragment extends Fragment {
             }
         });
     }
-
-    @OnItemClick(R.id.list_itemdoacao)
-   void OnItemSelected(int position) {
-        Itemdoacao itemdoacao = mItemdoacaoList.get(position);
-        if (getActivity() instanceof CliqueiNoItemListener) {
-            CliqueiNoItemListener listener = (CliqueiNoItemListener) getActivity();
-            listener.itemFoiClicado(itemdoacao);
-        }
-    }
-
-    public interface CliqueiNoItemListener{
-        void itemFoiClicado(Itemdoacao itemdoacao);
-    }
-    class DoacaoTask extends AsyncTask<Void, Void, Doacao> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showProgress();
-        }
-
-        @Override
-        protected Doacao doInBackground(Void... params) {
-
-            OkHttpClient client = new OkHttpClient();
-
-            Request request = new Request.Builder()
-                    .url("https://dl.dropboxusercontent.com/s/e26jjpgyfmfnoj9/doar.Json")
-                    .build();
-            try {
-                Response response = client.newCall(request).execute();
-                String jsonString = response.body().string();
-                Log.d("NGVL", jsonString);
-                Gson gson = new Gson();
-                Doacao doacao = gson.fromJson(jsonString, Doacao.class);
-                return doacao;
-
-            }catch (Exception e){
-                e.printStackTrace();
+        @OnItemClick(R.id.list_itemdoacao)
+        void OnItemSelected ( int position){
+            Itemdoacao itemdoacao = mItemdoacaoList.get(position);
+            if (getActivity() instanceof CliqueiNoItemListener) {
+                CliqueiNoItemListener listener = (CliqueiNoItemListener) getActivity();
+                listener.itemFoiClicado(itemdoacao);
             }
-            return null;
         }
 
-        @Override
-        protected void onPostExecute(Doacao doacao) {
-            super.onPostExecute(doacao);
-            if (doacao != null){
-                mItemdoacaoList.clear();
-                for (Categoria categoria: doacao.getCategorias()
-                     ) {
-                        mItemdoacaoList.addAll(categoria.getItens());
+        class DoacaoTask extends AsyncTask<Void, Void, Doacao> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showProgress();
+            }
+
+            @Override
+            protected Doacao doInBackground(Void... params) {
+
+                OkHttpClient client = new OkHttpClient();
+
+                Request request = new Request.Builder()
+                        .url("https://dl.dropboxusercontent.com/s/e26jjpgyfmfnoj9/doar.Json")
+                        .build();
+                try {
+                    Response response = client.newCall(request).execute();
+                    String jsonString = response.body().string();
+                    Log.d("NGVL", jsonString);
+                    Gson gson = new Gson();
+                    Doacao doacao = gson.fromJson(jsonString, Doacao.class);
+                    return doacao;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                mAdapter.notifyDataSetChanged();
-               }
-               mSwipe.setRefreshing(false);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Doacao doacao) {
+                super.onPostExecute(doacao);
+                if (doacao != null) {
+                    mItemdoacaoList.clear();
+                    for (Categoria categoria : doacao.getCategorias()
+                            ) {
+                        mItemdoacaoList.addAll(categoria.getItens());
+                    }
+                    mAdapter.notifyDataSetChanged();
+                }
+                mSwipe.setRefreshing(false);
+
             }
         }
     }
