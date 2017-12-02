@@ -13,6 +13,8 @@ import android.widget.ListView;
 import com.example.doarecife.doacoesrecife.database.DoacaoDAO;
 import com.example.doarecife.doacoesrecife.models.Itemdoacao;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,6 +37,14 @@ public class ListaSalvosFragment extends Fragment {
         setRetainInstance(true);
         mDao =  new DoacaoDAO(getActivity());
         mItemdoacaoList = mDao.listar();
+
+        ((DoacaoAPP)getActivity().getApplication()).getEventBus().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((DoacaoAPP)getActivity().getApplication()).getEventBus().unregister(this);
     }
 
     @Override
@@ -58,4 +68,10 @@ public class ListaSalvosFragment extends Fragment {
             }
         }
 
+        @Subscribe
+        public void atualizar(Itemdoacao itemdoacao) {
+            mItemdoacaoList.clear();
+            mItemdoacaoList.addAll(mDao.listar());
+            mAdapter.notifyDataSetChanged();
+        }
     }

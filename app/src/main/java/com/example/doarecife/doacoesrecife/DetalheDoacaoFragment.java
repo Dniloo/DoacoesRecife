@@ -7,14 +7,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.example.doarecife.doacoesrecife.database.DoacaoDAO;
 import com.example.doarecife.doacoesrecife.models.Itemdoacao;
 
 import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -25,8 +29,10 @@ public class DetalheDoacaoFragment extends Fragment {
     TextView mTextLocal;
     @BindView(R.id.text_tipo)
     TextView mTextTipo;
+    @BindView(R.id.imageFoto)
+    ImageView mImageFoto;
 
-
+    DoacaoDAO mDAO;
     private Itemdoacao mItemdoacao;
 
     public static DetalheDoacaoFragment newInstance(Itemdoacao itemdoacao) {
@@ -41,6 +47,7 @@ public class DetalheDoacaoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDAO = new DoacaoDAO(getActivity());
         if (getArguments() != null) {
             Parcelable p = getArguments().getParcelable(EXTRA_DOACAO);
             mItemdoacao = Parcels.unwrap(p);
@@ -56,6 +63,7 @@ public class DetalheDoacaoFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         mTextLocal.setText(mItemdoacao.getLocal());
         mTextTipo.setText(mItemdoacao.getTipo());
+        Glide.with(getActivity()).load(mItemdoacao.getFoto()).into(mImageFoto);
         return view;
     }
 
@@ -65,5 +73,14 @@ public class DetalheDoacaoFragment extends Fragment {
         unbinder.unbind();
     }
 
+    @OnClick(R.id.fab_favorito)
+    public void favoritoClick() {
+        if(mDAO.isFavorito(mItemdoacao)) {
+            mDAO.delete(mItemdoacao);
+        } else {
+            mDAO.inserir(mItemdoacao);
+        }
 
+        ((DoacaoAPP)getActivity().getApplication()).getEventBus().post(mItemdoacao);
+    }
 }

@@ -90,6 +90,23 @@ public class DoacaoDAO {
                     return itemdoacaos;
     }
 
+    public boolean isFavorito (Itemdoacao itemdoacao) {
+        DoacoesDbHelper dbHelper = new DoacoesDbHelper(mcontext);
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        Cursor cursor = database.rawQuery(
+                "SELECT count(*) FROM "+ DoacaoContract.TABLE_NAME +
+                " WHERE " + DoacaoContract.LOCAL + " =?",
+                new String[]{itemdoacao.getLocal()});
+        boolean existe = false;
+        if (cursor != null) {
+            cursor.moveToNext();
+            existe = cursor.getInt(0) > 0;
+            cursor.close();
+        }
+        database.close();
+        return existe;
+    }
+
     private ContentValues valuesFromDoacao(Itemdoacao itemdoacao){
         ContentValues contentValues = new ContentValues();
         contentValues.put(DoacaoContract.LOCAL, itemdoacao.getLocal());
