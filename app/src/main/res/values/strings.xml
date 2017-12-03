@@ -3,4 +3,6 @@
 
     <string name="aba_locais">Locais</string>
     <string name="aba_favoritos">Favoritos</string>
+    <string name="detalhe_local_titulo">Detalhes</string>
+    <string name="formato_quantidade">Quantidade> %1$d</string>
 </resources>

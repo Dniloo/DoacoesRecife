@@ -60,8 +60,8 @@ public class DoacaoDAO {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
         int rowsAffected = database.delete(DoacaoContract.TABLE_NAME,
-                    DoacaoContract._ID + " = ?",
-                new String[] {String.valueOf(itemdoacao.getId())});
+                    DoacaoContract.LOCAL + " = ?",
+                new String[] {itemdoacao.getLocal()});
 
         database.close();
         return rowsAffected;

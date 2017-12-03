@@ -13,14 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".DoacoesActivity"
-            android:theme="@style/AppTheme.NoTitle">
+            android:theme="@style/AppTheme.NoTitle"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetalheDoacaoActivity"></activity>
+        <activity android:name=".DetalheDoacaoActivity"
+            android:label="@string/detalhe_local_titulo"
+            android:parentActivityName=".DoacoesActivity">
+            <meta-data android:name="parentActivityName"
+                android:value=".DoacoesActivity"/>
+        </activity>
     </application>
 
 </manifest>

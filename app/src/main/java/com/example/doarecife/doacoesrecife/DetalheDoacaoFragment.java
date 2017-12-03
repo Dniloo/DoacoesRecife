@@ -1,8 +1,11 @@
 package com.example.doarecife.doacoesrecife;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +32,12 @@ public class DetalheDoacaoFragment extends Fragment {
     TextView mTextLocal;
     @BindView(R.id.text_tipo)
     TextView mTextTipo;
+    @BindView(R.id.text_quantidade)
+    TextView mTextQuantidade;
     @BindView(R.id.imageFoto)
     ImageView mImageFoto;
+    @BindView(R.id.fab_favorito)
+    FloatingActionButton mFabFavorito;
 
     DoacaoDAO mDAO;
     private Itemdoacao mItemdoacao;
@@ -63,8 +70,18 @@ public class DetalheDoacaoFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         mTextLocal.setText(mItemdoacao.getLocal());
         mTextTipo.setText(mItemdoacao.getTipo());
+        mTextQuantidade.setText(getString(R.string.formato_quantidade, mItemdoacao.getQuantidade()));
         Glide.with(getActivity()).load(mItemdoacao.getFoto()).into(mImageFoto);
+        toggleFavorito();
         return view;
+    }
+
+    private void toggleFavorito() {
+        boolean favorito = mDAO.isFavorito(mItemdoacao);
+        mFabFavorito.setImageResource(
+                favorito ? R.drawable.ic_remove_favorito : R.drawable.ic_add_favorito);
+        mFabFavorito.setBackgroundTintList(
+                favorito ? ColorStateList.valueOf(Color.RED) : ColorStateList.valueOf(Color.GREEN));
     }
 
     @Override
@@ -80,7 +97,7 @@ public class DetalheDoacaoFragment extends Fragment {
         } else {
             mDAO.inserir(mItemdoacao);
         }
-
+        toggleFavorito();
         ((DoacaoAPP)getActivity().getApplication()).getEventBus().post(mItemdoacao);
     }
 }
