@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.doarecife.doacoesrecife.ListaDoacoesFragment">
-    
+
+        <include layout="@layout/empty_list"/>
 
         <!-- TODO: Update blank fragment layout -->
         <ListView

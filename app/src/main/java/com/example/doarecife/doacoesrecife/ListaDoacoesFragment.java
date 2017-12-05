@@ -1,6 +1,9 @@
 package com.example.doarecife.doacoesrecife;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.doarecife.doacoesrecife.models.Categoria;
 import com.example.doarecife.doacoesrecife.models.Doacao;
@@ -33,6 +37,9 @@ public class ListaDoacoesFragment extends Fragment {
 
     @BindView(R.id.list_itemdoacao)
     ListView mListView;
+
+    @BindView(R.id.empety)
+            View mEmpety;
 
     DoacaoTask mDoacaoTask;
 
@@ -57,12 +64,14 @@ public class ListaDoacoesFragment extends Fragment {
         ButterKnife.bind(this, layout);
 
         mAdapter = new ItemAdapter(getContext(), mItemdoacaoList);
+
+        mListView.setEmptyView(mEmpety);
+
         mListView.setAdapter(mAdapter);
         mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mDoacaoTask = new DoacaoTask();
-                mDoacaoTask.execute();
+              baixarJson();
             }
         });
         return layout;
@@ -72,11 +81,25 @@ public class ListaDoacoesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (mItemdoacaoList.size() == 0 && mDoacaoTask == null) {
-            mDoacaoTask = new DoacaoTask();
-            mDoacaoTask.execute();
+            baixarJson();
         } else if (mDoacaoTask != null && mDoacaoTask.getStatus() == AsyncTask.Status.RUNNING) {
             showProgress();
         }
+    }
+
+    private void baixarJson(){
+        ConnectivityManager cm = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo inf = cm.getActiveNetworkInfo();
+        if(inf != null && inf.isConnected()){
+
+            mDoacaoTask = new DoacaoTask();
+            mDoacaoTask.execute();   
+        }else {
+            mSwipe.setRefreshing(false);
+            Toast.makeText(getActivity(), R.string.sem_conexao, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void showProgress() {
@@ -134,6 +157,10 @@ public class ListaDoacoesFragment extends Fragment {
                     for (Categoria categoria : doacao.getCategorias()
                             ) {
                         mItemdoacaoList.addAll(categoria.getItens());
+                        if(getResources().getBoolean(R.bool.tablet)
+                                && mItemdoacaoList.size()>0){
+                            OnItemSelected(0);
+                        }
                     }
                     mAdapter.notifyDataSetChanged();
                 }

@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.doarecife.doacoesrecife.ListaDoacoesFragment">
-    
+
+    <include layout="@layout/empty_list"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"

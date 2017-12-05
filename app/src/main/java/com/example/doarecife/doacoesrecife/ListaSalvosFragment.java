@@ -27,6 +27,9 @@ public class ListaSalvosFragment extends Fragment {
     @BindView(R.id.list_itemdoacao)
     ListView mListView;
 
+    @BindView(R.id.empety)
+            View mEmpety;
+
     List<Itemdoacao> mItemdoacaoList;
     ArrayAdapter<Itemdoacao> mAdapter;
 
@@ -51,10 +54,14 @@ public class ListaSalvosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         View layout = inflater.inflate(R.layout.fragment_lista_salvos, container, false);
         ButterKnife.bind(this, layout);
 
         mAdapter = new ItemAdapter(getContext(), mItemdoacaoList);
+
+        mListView.setEmptyView(mEmpety);
+
         mListView.setAdapter(mAdapter);
         return layout;
     }

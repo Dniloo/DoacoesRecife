@@ -4,5 +4,8 @@
     <string name="aba_locais">Locais</string>
     <string name="aba_favoritos">Favoritos</string>
     <string name="detalhe_local_titulo">Detalhes</string>
-    <string name="formato_quantidade">Quantidade> %1$d</string>
+    <string name="formato_quantidade">Quantidade %1$d</string>
+    <string name="compartilhar">Compartilhar</string>
+    <string name="sem_conexao">Sem Conexão com INTERNET</string>
+    <string name="lista_vazia">Sua lista estar VAZIA!</string>
 </resources>
