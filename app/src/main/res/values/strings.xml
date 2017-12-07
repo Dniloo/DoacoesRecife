@@ -8,5 +8,7 @@
     <string name="compartilhar">Compartilhar</string>
     <string name="sem_conexao">Sem Conexão com INTERNET</string>
     <string name="lista_vazia">Sua lista estar VAZIA!</string>
+    <string name="abrindo_mapa">ABRINDO MAPA</string>
     <string name="facebook_app_id">925661217609153</string>
+    <string name="title_activity_maps_doacoes">Map</string>
 </resources>

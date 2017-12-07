@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.doarecife.doacoesrecife.database.DoacaoDAO;
@@ -116,6 +117,13 @@ public class DetalheDoacaoFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+    @OnClick(R.id.meuBotao)
+    public void Maps(){
+
+        Toast.makeText(getContext(), R.string.abrindo_mapa, Toast.LENGTH_SHORT).show();
+        Intent intent =  new Intent(getContext(),MapsDoacoesActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.fab_favorito)

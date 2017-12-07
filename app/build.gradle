@@ -14,7 +14,8 @@ android {
 
     repositories {
         mavenCentral()
-        maven { url 'https://maven.google.com' }}
+        maven { url 'https://maven.google.com' }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -25,9 +26,12 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    //noinspection GradleCompatible
+    compile 'com.google.android.gms:play-services-maps:11.6.2'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:26.+'
@@ -42,4 +46,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:4.3.1'
     compile 'org.greenrobot:eventbus:3.1.1'
     compile 'com.facebook.android:facebook-android-sdk:4.28.0'
+    compile 'com.google.android.gms:play-services:6.1.71'
+
 }

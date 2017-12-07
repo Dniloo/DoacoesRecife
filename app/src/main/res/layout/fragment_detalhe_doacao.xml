@@ -34,6 +34,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"/>
+    <Button
+        android:id="@+id/meuBotao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/abrindo_mapa"
+        android:textColor="@android:color/holo_red_dark"
+        android:gravity="center"/>
 
 
 
